@@ -9,6 +9,9 @@ TagManager:
   - Portal_top
   - Portal_right
   - Map
+  - Thunder
+  - EnemyTurret
+  - EnemyTuret
   layers:
   - Default
   - TransparentFX

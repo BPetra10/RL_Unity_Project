@@ -64,6 +64,6 @@ public class RandomPosGen
         float randomX = Random.Range(minX, maxX);
         float randomZ = Random.Range(minZ, maxZ);
 
-        return new Vector3(randomX, 1, randomZ);
+        return new Vector3(randomX, 1.2f, randomZ);
     }
 }
