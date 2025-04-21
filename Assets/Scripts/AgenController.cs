@@ -5,10 +5,13 @@ public class AgenController : MonoBehaviour
     //Csak az animáció miatt hoztam létre mert elvileg Itt kell bűvészkedni.
     private Animator animator;
     private GameObject gm;
-    bool isWalking ;
+    bool isWalking;
+    private CharacterController characterController;
 
     void Start()
     {
+        characterController = GetComponent<CharacterController>();
+
         gm = GameObject.Find("GameMananger");
         if (gm == null)
         {
@@ -29,5 +32,11 @@ public class AgenController : MonoBehaviour
         {
             animator.SetBool("Run_b", isWalking);
         }
+    }
+    public void teleport(Vector3 newPos)
+    {
+        characterController.enabled = false; 
+        transform.position = newPos; 
+        characterController.enabled = true; 
     }
 }

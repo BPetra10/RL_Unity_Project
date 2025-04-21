@@ -5,7 +5,6 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private int counter = 0;
     [SerializeField] private GameObject collectablePrefab;
-    [SerializeField] private Transform Map;
 
     private int goalNumber;
 
@@ -29,7 +28,7 @@ public class GameManager : MonoBehaviour
 
     private void SpawnCollectable()
     {
-        RandomPosGen posGen = new RandomPosGen(Map);
+        RandomPosGen posGen = new RandomPosGen();
         Vector3 spawnPosition = posGen.GetRandomPosition();
         Instantiate(collectablePrefab, spawnPosition, Quaternion.identity);
     }

@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 3
   tags:
   - Agent
+  - Portal_left
+  - Portal_top
+  - Portal_right
+  - Map
   layers:
   - Default
   - TransparentFX

@@ -5,10 +5,14 @@ public class RandomPosGen
 {
     private List<Renderer> planes = new List<Renderer>();
     private float margin; // mennyi legyen a levágás szélekbõl
+    private GameObject map;
+    private Transform mapParent;
 
     // Konstruktor, amiben megkapja a Map szülõ Transformját
-    public RandomPosGen(Transform mapParent, float edgeMargin = 1.3f)
+    public RandomPosGen(float edgeMargin = 1.3f)
     {
+        map = GameObject.FindGameObjectWithTag("Map");
+        mapParent = map.transform;
         margin = edgeMargin;
         CollectPlanes(mapParent);
     }
