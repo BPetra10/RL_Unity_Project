@@ -9,7 +9,7 @@ public class RandomPosGen
     private Transform mapParent;
 
     // Konstruktor, amiben megkapja a Map szülõ Transformját
-    public RandomPosGen(float edgeMargin = 1.3f)
+    public RandomPosGen(float edgeMargin = 1.5f)
     {
         map = GameObject.FindGameObjectWithTag("Map");
         mapParent = map.transform;

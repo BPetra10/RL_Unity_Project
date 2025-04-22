@@ -64,15 +64,12 @@ public class Teleport : MonoBehaviour
         Vector3 spawnPosition = randomTeleport.transform.position;
 
         if (randomTeleport == teleportLeft)
-        {
-            spawnPosition.x -= portalOffset;  
-            spawnPosition.z += portalOffset;
-
+        { 
+            spawnPosition.x -= portalOffset;
         }
         else 
         {
             spawnPosition.x += portalOffset;
-            spawnPosition.z += portalOffset;
         }
 
         agent.transform.position = spawnPosition;
