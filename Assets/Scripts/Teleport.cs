@@ -53,7 +53,7 @@ public class Teleport : MonoBehaviour
         spawnPosition.z += portalOffset;
 
         agent.transform.position = spawnPosition;
-        playerRef.GetComponent<AgenController>().teleport(spawnPosition);
+        playerRef.GetComponent<AgentController>().teleport(spawnPosition);
         Debug.Log("Teleported to Top!");
     }
 
@@ -73,7 +73,7 @@ public class Teleport : MonoBehaviour
         }
 
         agent.transform.position = spawnPosition;
-        playerRef.GetComponent<AgenController>().teleport(spawnPosition);
+        playerRef.GetComponent<AgentController>().teleport(spawnPosition);
         Debug.Log("Teleported to " + randomTeleport.name);
     }
 

@@ -9,6 +9,7 @@ public class AgentController : Agent
 
 
     public Transform TargetTransform;
+    private CharacterController characterController;
 
     private enum ACTIONS
     {
@@ -39,5 +40,12 @@ public class AgentController : Agent
         sensor.AddObservation(TargetTransform.localPosition.x);
         sensor.AddObservation(TargetTransform.localPosition.z);
 
+    }
+
+    public void teleport(Vector3 newPos)
+    {
+        characterController.enabled = false;
+        transform.position = newPos;
+        characterController.enabled = true;
     }
 }
