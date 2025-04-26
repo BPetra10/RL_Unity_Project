@@ -12,7 +12,7 @@ public class ProjectileController : MonoBehaviour
     void Start()
     {
         agentTransform = GameObject.FindGameObjectWithTag("Agent").transform;
-        gm = GameObject.Find("GameManager");
+        gm = GameObject.Find("GameMananger");
         if (gm == null)
         {
             Debug.LogError("Game Manager object not found");
@@ -26,6 +26,8 @@ public class ProjectileController : MonoBehaviour
         }
 
         RotateTowardsPlayer();
+
+        Destroy(gameObject, 10f);
     }
 
     void Update()
@@ -38,7 +40,8 @@ public class ProjectileController : MonoBehaviour
     {
         if (agentTransform != null)
         {
-            transform.LookAt(agentTransform);
+            Vector3 targetPosition = agentTransform.position + new Vector3(0, 0.5f, 0);
+            transform.LookAt(targetPosition);
         }
     }
 
