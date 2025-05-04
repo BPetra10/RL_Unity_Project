@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.MLAgents;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -6,6 +7,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int counter = 0;
     [SerializeField] private GameObject collectablePrefab;
     [SerializeField] private GameObject enemyTurretPrefab;
+    private GameObject agentPrefab;
     private float minDistance = 5f;
     private int enemyCount = 0;
     public int initialEnemyCount = 4;
@@ -16,22 +18,39 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         goalNumber = 10;
-        for (int i = 0; i < goalNumber; i++)
-        {
-            SpawnCollectable();
-        }
+
+         SpawnCollectable();
+       
 
         for (int i = 0; i < initialEnemyCount; i++)
         {
             SpawnEnemy();
         }
+
+        agentPrefab = GameObject.FindGameObjectWithTag("Agent");
+
+        if (agentPrefab == null)
+        {
+            Debug.LogError("agent object not found");
+        }
     }
     public void CollectablePickedUp()
     {
-        SpawnCollectable(); 
-        if (counter == goalNumber) 
+        Agent agent = agentPrefab?.GetComponent<Agent>();
+        if (agent != null)
         {
-            //TODO
+            agent.AddReward(30f);
+        }
+
+        counter++;
+
+        if (counter >= goalNumber)
+        {
+            agent?.EndEpisode();
+        }
+        else
+        {
+            SpawnCollectable();
         }
     }
 
@@ -82,4 +101,30 @@ public class GameManager : MonoBehaviour
         }
         return false;
     }
+
+    //void Update()
+    //{
+    //    collectable = GameObject.FindGameObjectWithTag("Thunder");
+    //}
+
+    public void ResetEnvironment()
+    {
+        counter = 0;
+
+        GameObject[] collectables = GameObject.FindGameObjectsWithTag("Thunder");
+
+        if (collectables.Length == 0)
+        {
+            Debug.LogWarning("No thunder objects found to destroy.");
+        }
+
+        foreach (GameObject collectable in collectables)
+        {
+            Destroy(collectable);
+        }
+
+        SpawnCollectable();
+    }
+
+
 }

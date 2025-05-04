@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.MLAgents;
 using UnityEngine;
 
 public class ProjectileController : MonoBehaviour
@@ -44,13 +45,18 @@ public class ProjectileController : MonoBehaviour
             transform.LookAt(targetPosition);
         }
     }
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Agent"))
         {
-           //TODO - büntetés
+            var agent = other.GetComponent<Agent>();
+            if (agent != null)
+            {
+                agent.AddReward(-1f);
+                agent.EndEpisode();
+            }
             Destroy(gameObject);
         }
+       
     }
 }

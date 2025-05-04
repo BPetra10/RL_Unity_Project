@@ -12,6 +12,8 @@ TagManager:
   - Thunder
   - EnemyTurret
   - EnemyTuret
+  - Wall
+  - Projectile
   layers:
   - Default
   - TransparentFX
