@@ -34,7 +34,7 @@ public class AgentController : Agent
         }
         env.GetGameManager().ResetEnvironment();
 
-        transform.localPosition = new Vector3(0, 0.5f, 0);
+        transform.localPosition = new Vector3(0, -4.1f, 0);
 
         TargetTransform = GameObject.FindGameObjectWithTag("Thunder").transform;
 

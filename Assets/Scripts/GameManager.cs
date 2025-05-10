@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
     public GameObject collectablePrefab;
     public GameObject enemyTurretPrefab;
     [SerializeField] public GameObject mapObj;
-    private int initialEnemyCount = 2;
+    private int initialEnemyCount = 1;
     private int counter = 0;
     private int goalNumber = 10;
     private float minDistance = 5f;
