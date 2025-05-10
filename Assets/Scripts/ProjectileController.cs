@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using Unity.MLAgents;
 using UnityEngine;
 
@@ -9,31 +8,26 @@ public class ProjectileController : MonoBehaviour
     private Transform agentTransform;
     private GameObject gm;
 
-
     void Start()
     {
-        agentTransform = GameObject.FindGameObjectWithTag("Agent").transform;
-        gm = GameObject.Find("GameMananger");
-        if (gm == null)
+        var envController = GetComponentInParent<EnvironmentController>();
+        if (envController == null)
         {
-            Debug.LogError("Game Manager object not found");
+            Debug.LogError("EnvironmentController not found in parent hierarchy.");
+            return;
         }
 
-
-
-        if (agentTransform == null)
-        {
-            Debug.LogError("Player GameObject not found");
-        }
+        gm = envController.GetGameManager().gameObject;
+        agentTransform = envController.GetAgent().transform;
+        if (gm == null) Debug.LogError("Game Manager object not found");
+        if (agentTransform == null) Debug.LogError("Player GameObject not found");
 
         RotateTowardsPlayer();
-
-        Destroy(gameObject, 10f);
+        Destroy(gameObject, 4f);
     }
 
     void Update()
     {
-        //TODO-Lábához lövi a lövedéket-JAVÍT
         transform.Translate(Vector3.forward * flyspeed * Time.deltaTime);
     }
 
@@ -43,8 +37,10 @@ public class ProjectileController : MonoBehaviour
         {
             Vector3 targetPosition = agentTransform.position + new Vector3(0, 0.5f, 0);
             transform.LookAt(targetPosition);
+
         }
     }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Agent"))
@@ -52,11 +48,15 @@ public class ProjectileController : MonoBehaviour
             var agent = other.GetComponent<Agent>();
             if (agent != null)
             {
-                agent.AddReward(-1f);
+                agent.AddReward(-10f);
+                Debug.LogError("projectal hit punishment ");
                 agent.EndEpisode();
             }
             Destroy(gameObject);
         }
-       
+        if (other.CompareTag("Wall"))
+        {
+            Destroy(gameObject);
+        }
     }
 }

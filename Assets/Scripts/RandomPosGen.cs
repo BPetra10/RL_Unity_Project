@@ -1,27 +1,22 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 
 public class RandomPosGen
 {
     private List<Renderer> planes = new List<Renderer>();
-    private float margin; // mennyi legyen a levágás szélekbõl
-    private GameObject map;
+    private float margin;
     private Transform mapParent;
 
-    // Konstruktor, amiben megkapja a Map szülõ Transformját
-    public RandomPosGen(float edgeMargin = 1.5f)
+    public RandomPosGen(GameObject map, float edgeMargin = 1.5f)
     {
-        map = GameObject.FindGameObjectWithTag("Map");
         mapParent = map.transform;
         margin = edgeMargin;
         CollectPlanes(mapParent);
     }
 
-    // Lekérdezi a plane-eket a megadott szülõbõl
     private void CollectPlanes(Transform mapParent)
     {
         planes.Clear();
-
         foreach (Transform child in mapParent)
         {
             Renderer rend = child.GetComponent<Renderer>();
@@ -37,19 +32,17 @@ public class RandomPosGen
         }
     }
 
-    // Random pozíció generálása egy random plane-rõl
     public Vector3 GetRandomPosition()
     {
         if (planes.Count == 0)
         {
-            Debug.LogWarning("Nincs elérhetõ plane.");
+            Debug.LogWarning("Nincs elÃ©rhetÅ‘ plane.");
             return Vector3.zero;
         }
 
         Renderer selected = planes[Random.Range(0, planes.Count)];
         Bounds bounds = selected.bounds;
 
-        // margin alkalmazása a szélekre (hogy ne essen falra)
         float minX = bounds.min.x + margin;
         float maxX = bounds.max.x - margin;
         float minZ = bounds.min.z + margin;
@@ -57,7 +50,7 @@ public class RandomPosGen
 
         if (minX > maxX || minZ > maxZ)
         {
-            Debug.LogWarning("Margin túl nagy, nincs hely spawnra!");
+            Debug.LogWarning("Margin tÃºl nagy, nincs hely spawnra!");
             return bounds.center;
         }
 

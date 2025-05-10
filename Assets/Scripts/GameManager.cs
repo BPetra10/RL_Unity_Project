@@ -1,48 +1,43 @@
-using System.Collections.Generic;
 using Unity.MLAgents;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private int counter = 0;
-    [SerializeField] private GameObject collectablePrefab;
-    [SerializeField] private GameObject enemyTurretPrefab;
-    private GameObject agentPrefab;
-    private float minDistance = 5f;
-    private int enemyCount = 0;
+    public GameObject agentPrefab;
+    public GameObject collectablePrefab;
+    public GameObject enemyTurretPrefab;
+    [SerializeField] public GameObject mapObj;
     public int initialEnemyCount = 4;
+    private int counter = 0;
+    private int goalNumber = 10;
+    private float minDistance = 5f;
+    private float higherReward = 30f;
+    private float maxReward = 80f;
 
-    private int goalNumber;
+    private EnvironmentController env;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        goalNumber = 10;
-
-         SpawnCollectable();
-       
-
+        env = GetComponentInParent<EnvironmentController>();
+        SpawnCollectable();
         for (int i = 0; i < initialEnemyCount; i++)
         {
             SpawnEnemy();
         }
-
-        agentPrefab = GameObject.FindGameObjectWithTag("Agent");
-
-        if (agentPrefab == null)
-        {
-            Debug.LogError("agent object not found");
-        }
     }
+
     public void CollectablePickedUp()
     {
-        Agent agent = agentPrefab?.GetComponent<Agent>();
+        Agent agent = env.GetAgent().GetComponent<Agent>();
         if (agent != null)
         {
-            agent.AddReward(30f);
+            agent.AddReward(higherReward);
         }
 
         counter++;
+        higherReward = Mathf.Min(higherReward + 10f, maxReward);
+
+        Debug.Log("Reward for collectable pick up: " + higherReward);
 
         if (counter >= goalNumber)
         {
@@ -54,77 +49,58 @@ public class GameManager : MonoBehaviour
         }
     }
 
+
     private void SpawnCollectable()
     {
-        RandomPosGen posGen = new RandomPosGen();
-        Vector3 spawnPosition = posGen.GetRandomPosition();
-        Instantiate(collectablePrefab, spawnPosition, Quaternion.identity);
+        RandomPosGen posGen = new RandomPosGen(mapObj);
+        Vector3 spawnPos = posGen.GetRandomPosition();
+        Instantiate(collectablePrefab, spawnPos, Quaternion.identity, transform);
     }
 
-    // Update is called once per frame
     public void SpawnEnemy()
     {
-        enemyCount++;
-
         Vector3 spawnPos;
-
-
         do
         {
-
-            RandomPosGen posGen = new RandomPosGen();
+            RandomPosGen posGen = new RandomPosGen(mapObj);
             spawnPos = posGen.GetRandomPosition();
-            
+        } while (IsTooClose(spawnPos));
 
-        }
-        while (IsTooCloseToOtherEnemy(spawnPos));
-
-        spawnPos.y= spawnPos.y - 0.7f;
-        Instantiate(enemyTurretPrefab, spawnPos, Quaternion.identity);
-
+        spawnPos.y -= 0.7f;
+        Instantiate(enemyTurretPrefab, spawnPos, Quaternion.identity, transform);
     }
 
-    private bool IsTooCloseToOtherEnemy(Vector3 pos)
+    private bool IsTooClose(Vector3 pos)
     {
-        //TODO Portálba ne essen , a collectable se
-        GameObject[] enemies = GameObject.FindGameObjectsWithTag("EnemyTurret");
-        GameObject player = GameObject.FindGameObjectWithTag("Agent");
-        GameObject diamond = GameObject.FindGameObjectWithTag("Thunder");
-        foreach (GameObject enemy in enemies)
+        foreach (var enemy in GameObject.FindGameObjectsWithTag("EnemyTurret"))
         {
-            if (Vector3.Distance(pos, enemy.transform.position) < minDistance
-                && Vector3.Distance(pos, player.transform.position) < minDistance
-                && Vector3.Distance(pos, diamond.transform.position) < minDistance)
-            {
+            if (enemy.transform.IsChildOf(transform) &&
+                Vector3.Distance(pos, enemy.transform.position) < minDistance)
                 return true;
-            }
         }
         return false;
     }
 
-    //void Update()
-    //{
-    //    collectable = GameObject.FindGameObjectWithTag("Thunder");
-    //}
-
     public void ResetEnvironment()
     {
         counter = 0;
-
-        GameObject[] collectables = GameObject.FindGameObjectsWithTag("Thunder");
-
-        if (collectables.Length == 0)
+        foreach (Transform child in env.transform)
         {
-            Debug.LogWarning("No thunder objects found to destroy.");
+            if (child.CompareTag("Thunder")) Destroy(child.gameObject);
         }
 
-        foreach (GameObject collectable in collectables)
+        // Töröljük az ellenségeket
+        foreach (Transform child in env.transform)
         {
-            Destroy(collectable);
+            if (child.CompareTag("EnemyTurret")) Destroy(child.gameObject);
         }
 
+        // Töröljük a lövedékeket
+        foreach (Transform child in env.transform)
+        {
+            if (child.CompareTag("Projectile")) Destroy(child.gameObject);
+        }
         SpawnCollectable();
+        higherReward = 30f;
     }
-
-
 }
