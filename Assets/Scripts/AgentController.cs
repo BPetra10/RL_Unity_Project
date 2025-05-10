@@ -1,3 +1,4 @@
+using System.Linq;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
@@ -7,10 +8,10 @@ public class AgentController : Agent
 {
 
     public float speed = 5f;
-
+    private Animator animator;
 
     public Transform TargetTransform;
-
+    private EnvironmentController env;
     private enum ACTIONS
     {
         LEFT = 0,
@@ -21,32 +22,47 @@ public class AgentController : Agent
 
     public override void OnEpisodeBegin()
     {
-        FindAnyObjectByType<GameManager>().ResetEnvironment();
 
-        transform.localPosition = new Vector3(0, 0.5f, -10);
+        if (env == null)
+        {
+            env = GetComponentInParent<EnvironmentController>();
+            if (env == null)
+            {
+                Debug.LogError("EnvironmentController not found in parent.");
+                return;
+            }
+        }
+        env.GetGameManager().ResetEnvironment();
+
+        transform.localPosition = new Vector3(0, 0.5f, 0);
 
         TargetTransform = GameObject.FindGameObjectWithTag("Thunder").transform;
-        
+
         if (TargetTransform == null)
         {
             Debug.LogError("Target GameObject not found");
         }
+        animator = GetComponentInParent<Animator>();
     }
 
 
     public override void CollectObservations(VectorSensor sensor)
     {
         // Thunder pozíció
+        GameObject closestThunder = FindClosestWithTag("Thunder");
+        TargetTransform = closestThunder != null ? closestThunder.transform : null;
         if (TargetTransform != null)
         {
             Vector3 relativeTargetPos = TargetTransform.localPosition - transform.localPosition;
             sensor.AddObservation(relativeTargetPos.x);
             sensor.AddObservation(relativeTargetPos.z);
+            Debug.Log($"[OBSERVE] Thunder relative pos: {relativeTargetPos}");
         }
         else
         {
             sensor.AddObservation(0f);
             sensor.AddObservation(0f);
+            Debug.LogWarning($"[OBSERVE] Thunder is null.");
         }
 
         // Lövedék (Projectile) legközelebbi pozíció
@@ -56,31 +72,39 @@ public class AgentController : Agent
             Vector3 relativeProjectilePos = closestProjectile.transform.localPosition - transform.localPosition;
             sensor.AddObservation(relativeProjectilePos.x);
             sensor.AddObservation(relativeProjectilePos.z);
+            Debug.Log($"[OBSERVE] Projectal is NOOOOOT null.");
         }
         else
         {
             sensor.AddObservation(0f);
             sensor.AddObservation(0f);
+            Debug.LogWarning($"[OBSERVE] Projectal is null.");
         }
 
         // Ellenség (Enemy) legközelebbi pozíció
-        GameObject closestEnemy = FindClosestWithTag("EnemyTuret");
+        GameObject closestEnemy = FindClosestWithTag("EnemyTurret");
         if (closestEnemy != null)
         {
             Vector3 relativeEnemyPos = closestEnemy.transform.localPosition - transform.localPosition;
             sensor.AddObservation(relativeEnemyPos.x);
             sensor.AddObservation(relativeEnemyPos.z);
+            Debug.Log($"[OBSERVE] Turret is NOOOOOT null.");
         }
         else
         {
             sensor.AddObservation(0f);
             sensor.AddObservation(0f);
+            Debug.LogWarning($"[OBSERVE] Turret is null.");
         }
     }
 
     private GameObject FindClosestWithTag(string tag)
     {
-        GameObject[] objs = GameObject.FindGameObjectsWithTag(tag);
+        GameObject[] objs = env.GetComponentsInChildren<Transform>(true)
+                                .Where(t => t.CompareTag(tag))
+                                .Select(t => t.gameObject)
+                                .ToArray();
+
         GameObject closest = null;
         float minDist = Mathf.Infinity;
         Vector3 currentPos = transform.position;
@@ -134,6 +158,7 @@ public class AgentController : Agent
     {
 
         var actionTaken = actions.DiscreteActions[0];
+        bool isMoving = true;
 
         switch (actionTaken)
         {
@@ -153,8 +178,17 @@ public class AgentController : Agent
         }
         Debug.Log("Action received: " + actionTaken);
 
-        transform.Translate(Vector3.forward * speed * Time.fixedDeltaTime);
+        if (isMoving)
+        {
+            transform.Translate(Vector3.forward * speed * Time.fixedDeltaTime);
+        }
+
         AddReward(-0.01f);
+
+        if (animator != null)
+        {
+            animator.SetBool("isMoving", isMoving);
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -162,6 +196,7 @@ public class AgentController : Agent
         if (collision.collider.tag == "Wall")
         {
             AddReward(-0.5f);
+            Debug.LogWarning($"Wall punishment applied.");
             EndEpisode();
         }
     }

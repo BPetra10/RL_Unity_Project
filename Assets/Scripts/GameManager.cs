@@ -3,11 +3,10 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject agentPrefab;
     public GameObject collectablePrefab;
     public GameObject enemyTurretPrefab;
     [SerializeField] public GameObject mapObj;
-    public int initialEnemyCount = 4;
+    private int initialEnemyCount = 2;
     private int counter = 0;
     private int goalNumber = 10;
     private float minDistance = 5f;
@@ -54,7 +53,7 @@ public class GameManager : MonoBehaviour
     {
         RandomPosGen posGen = new RandomPosGen(mapObj);
         Vector3 spawnPos = posGen.GetRandomPosition();
-        Instantiate(collectablePrefab, spawnPos, Quaternion.identity, transform);
+        Instantiate(collectablePrefab, spawnPos, Quaternion.identity, env.transform);
     }
 
     public void SpawnEnemy()
@@ -67,7 +66,7 @@ public class GameManager : MonoBehaviour
         } while (IsTooClose(spawnPos));
 
         spawnPos.y -= 0.7f;
-        Instantiate(enemyTurretPrefab, spawnPos, Quaternion.identity, transform);
+        Instantiate(enemyTurretPrefab, spawnPos, Quaternion.identity, env.transform);
     }
 
     private bool IsTooClose(Vector3 pos)
@@ -99,6 +98,10 @@ public class GameManager : MonoBehaviour
         foreach (Transform child in env.transform)
         {
             if (child.CompareTag("Projectile")) Destroy(child.gameObject);
+        }
+        for (int i = 0; i < initialEnemyCount; i++)
+        {
+            SpawnEnemy();
         }
         SpawnCollectable();
         higherReward = 30f;
