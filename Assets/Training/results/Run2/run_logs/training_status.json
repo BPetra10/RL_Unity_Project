@@ -2,31 +2,58 @@
     "ThunderSearch": {
         "checkpoints": [
             {
-                "steps": 499925,
-                "file_path": "results\\Run2\\ThunderSearch\\ThunderSearch-499925.onnx",
-                "reward": -1.5626998177170754,
-                "creation_time": 1746897523.7174532,
+                "steps": 999984,
+                "file_path": "results\\Run2\\ThunderSearch\\ThunderSearch-999984.onnx",
+                "reward": 1.3576144793893947,
+                "creation_time": 1746900929.6620576,
                 "auxillary_file_paths": [
-                    "results\\Run2\\ThunderSearch\\ThunderSearch-499925.pt"
+                    "results\\Run2\\ThunderSearch\\ThunderSearch-999984.pt"
                 ]
             },
             {
-                "steps": 905072,
-                "file_path": "results\\Run2\\ThunderSearch\\ThunderSearch-905072.onnx",
-                "reward": 0.29449989199638366,
-                "creation_time": 1746898559.245437,
+                "steps": 1499925,
+                "file_path": "results\\Run2\\ThunderSearch\\ThunderSearch-1499925.onnx",
+                "reward": 2.6541119568815854,
+                "creation_time": 1746902026.1479092,
                 "auxillary_file_paths": [
-                    "results\\Run2\\ThunderSearch\\ThunderSearch-905072.pt"
+                    "results\\Run2\\ThunderSearch\\ThunderSearch-1499925.pt"
+                ]
+            },
+            {
+                "steps": 1999748,
+                "file_path": "results\\Run2\\ThunderSearch\\ThunderSearch-1999748.onnx",
+                "reward": 2.660567672940835,
+                "creation_time": 1746903093.2817016,
+                "auxillary_file_paths": [
+                    "results\\Run2\\ThunderSearch\\ThunderSearch-1999748.pt"
+                ]
+            },
+            {
+                "steps": 2499928,
+                "file_path": "results\\Run2\\ThunderSearch\\ThunderSearch-2499928.onnx",
+                "reward": 5.015670821370694,
+                "creation_time": 1746904203.1613972,
+                "auxillary_file_paths": [
+                    "results\\Run2\\ThunderSearch\\ThunderSearch-2499928.pt"
+                ]
+            },
+            {
+                "steps": 2613572,
+                "file_path": "results\\Run2\\ThunderSearch\\ThunderSearch-2613572.onnx",
+                "reward": 4.674999588727951,
+                "creation_time": 1746904470.986028,
+                "auxillary_file_paths": [
+                    "results\\Run2\\ThunderSearch\\ThunderSearch-2613572.pt"
                 ]
             }
         ],
         "final_checkpoint": {
-            "steps": 905072,
+            "steps": 2613572,
             "file_path": "results\\Run2\\ThunderSearch.onnx",
-            "reward": 0.29449989199638366,
-            "creation_time": 1746898559.245437,
+            "reward": 4.674999588727951,
+            "creation_time": 1746904470.986028,
             "auxillary_file_paths": [
-                "results\\Run2\\ThunderSearch\\ThunderSearch-905072.pt"
+                "results\\Run2\\ThunderSearch\\ThunderSearch-2613572.pt"
             ]
         }
     },

@@ -195,7 +195,7 @@ public class AgentController : Agent
     {
         if (collision.collider.tag == "Wall")
         {
-            AddReward(-0.5f);
+            AddReward(-2f);
             Debug.LogWarning($"Wall punishment applied.");
             EndEpisode();
         }
