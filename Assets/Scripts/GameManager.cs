@@ -19,15 +19,15 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         env = GetComponentInParent<EnvironmentController>();
-        SpawnCollectable();
+        //SpawnCollectable();
 
 
         //TÖBB VILLÁM GYORSABB TANULÁSHOZ (3) Resetben is ki kell kommenteleni
-        //for (int i = 0; i < 3; i++)
-        //{
-           
-        //    SpawnCollectable();
-        //}
+        for (int i = 0; i < 3; i++)
+        {
+
+            SpawnCollectable();
+        }
 
 
         for (int i = 0; i < initialEnemyCount; i++)
@@ -70,38 +70,16 @@ public class GameManager : MonoBehaviour
     public void SpawnEnemy()
     {
         Vector3 spawnPos;
-        do
-        {
-            RandomPosGen posGen = new RandomPosGen(mapObj);
-            spawnPos = posGen.GetRandomPosition();
-        } while (IsTooClose(spawnPos));
+     
+        RandomPosGen posGen = new RandomPosGen(mapObj);
+        spawnPos = posGen.GetRandomPosition();
+       
 
         spawnPos.y -= 0.7f;
         Instantiate(enemyTurretPrefab, spawnPos, Quaternion.identity, env.transform);
     }
 
-    private bool IsTooClose(Vector3 pos)
-    {
-        var objectsToCheck = env.GetComponentsInChildren<Transform>(true)
-                           .Where(t => t.CompareTag("EnemyTurret") || t.CompareTag("Thunder") || t.CompareTag("Agent"))
-                           .Select(t => t.gameObject)
-                           .ToList(); 
-
-        foreach (GameObject obj in objectsToCheck)
-        {
-            
-            Vector3 objPosFlat = new Vector3(obj.transform.position.x, 0, obj.transform.position.z);
-            Vector3 posFlat = new Vector3(pos.x, 0, pos.z);
-
-            
-            if (Vector3.Distance(posFlat, objPosFlat) < minDistance)
-            { 
-                return true;
-            }
-        }
-
-        return false;
-    }
+   
 
     public void ResetEnvironment()
     {
@@ -127,14 +105,14 @@ public class GameManager : MonoBehaviour
             SpawnEnemy();
         }
 
-        SpawnCollectable();
+        //SpawnCollectable();
 
 
-        //for (int i = 0; i < 3; i++)
-        //{
-            
-        //    SpawnCollectable();
-        //}
+        for (int i = 0; i < 3; i++)
+        {
+
+            SpawnCollectable();
+        }
         higherReward = 30f;
     }
 }

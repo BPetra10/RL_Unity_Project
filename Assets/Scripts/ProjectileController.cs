@@ -50,8 +50,8 @@ public class ProjectileController : MonoBehaviour
             var agent = other.GetComponent<Agent>();
             if (agent != null)
             {
-                agent.AddReward(-2f);
-                Debug.LogError("projectal hit punishment ");
+                agent.AddReward(-10f);
+                //Debug.LogError("projectal hit punishment ");
                 agent.EndEpisode();
             }
             Destroy(gameObject);

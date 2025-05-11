@@ -52,7 +52,15 @@ public class AgentController : Agent
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        // Thunder pozíció
+
+        sensor.AddObservation(transform.localPosition.x);
+        sensor.AddObservation(transform.localPosition.z);
+
+
+        sensor.AddObservation(transform.forward.x);
+        sensor.AddObservation(transform.forward.z);
+        
+
         GameObject closestThunder = FindClosestWithTag("Thunder");
         TargetTransform = closestThunder != null ? closestThunder.transform : null;
         if (TargetTransform != null)
@@ -60,7 +68,7 @@ public class AgentController : Agent
             Vector3 relativeTargetPos = TargetTransform.localPosition - transform.localPosition;
             sensor.AddObservation(relativeTargetPos.x);
             sensor.AddObservation(relativeTargetPos.z);
-            Debug.Log($"[OBSERVE] Thunder relative pos: {relativeTargetPos}");
+            //Debug.Log($"[OBSERVE] Thunder relative pos: {relativeTargetPos}");
         }
         else
         {
@@ -76,13 +84,13 @@ public class AgentController : Agent
             Vector3 relativeProjectilePos = closestProjectile.transform.localPosition - transform.localPosition;
             sensor.AddObservation(relativeProjectilePos.x);
             sensor.AddObservation(relativeProjectilePos.z);
-            Debug.Log($"[OBSERVE] Projectal is NOOOOOT null.");
+            //Debug.Log($"[OBSERVE] Projectal is NOOOOOT null.");
         }
         else
         {
             sensor.AddObservation(0f);
             sensor.AddObservation(0f);
-            Debug.LogWarning($"[OBSERVE] Projectal is null.");
+          //  Debug.LogWarning($"[OBSERVE] Projectal is null.");
         }
 
         // Ellenség (Enemy) legközelebbi pozíció
@@ -92,7 +100,7 @@ public class AgentController : Agent
             Vector3 relativeEnemyPos = closestEnemy.transform.localPosition - transform.localPosition;
             sensor.AddObservation(relativeEnemyPos.x);
             sensor.AddObservation(relativeEnemyPos.z);
-            Debug.Log($"[OBSERVE] Turret is NOOOOOT null.");
+           // Debug.Log($"[OBSERVE] Turret is NOOOOOT null.");
         }
         else
         {
@@ -198,8 +206,8 @@ public class AgentController : Agent
         //fal bünti opcionálian  kihagyható
         if (collision.collider.tag == "Wall")
         {
-            AddReward(-1f);
-            Debug.LogWarning($"Wall punishment applied.");
+            AddReward(-10f);
+            //Debug.LogWarning($"Wall punishment applied.");
             EndEpisode();
         }
     }
