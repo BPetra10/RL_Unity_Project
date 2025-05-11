@@ -1,0 +1,65 @@
+{
+    "ThunderSearch": {
+        "checkpoints": [
+            {
+                "steps": 1499971,
+                "file_path": "results\\Run1\\ThunderSearch\\ThunderSearch-1499971.onnx",
+                "reward": -9.353999828208577,
+                "creation_time": 1746950752.1904116,
+                "auxillary_file_paths": [
+                    "results\\Run1\\ThunderSearch\\ThunderSearch-1499971.pt"
+                ]
+            },
+            {
+                "steps": 1999979,
+                "file_path": "results\\Run1\\ThunderSearch\\ThunderSearch-1999979.onnx",
+                "reward": -11.235121843291491,
+                "creation_time": 1746951793.5711775,
+                "auxillary_file_paths": [
+                    "results\\Run1\\ThunderSearch\\ThunderSearch-1999979.pt"
+                ]
+            },
+            {
+                "steps": 2499976,
+                "file_path": "results\\Run1\\ThunderSearch\\ThunderSearch-2499976.onnx",
+                "reward": -9.412448850213265,
+                "creation_time": 1746952781.640749,
+                "auxillary_file_paths": [
+                    "results\\Run1\\ThunderSearch\\ThunderSearch-2499976.pt"
+                ]
+            },
+            {
+                "steps": 2999993,
+                "file_path": "results\\Run1\\ThunderSearch\\ThunderSearch-2999993.onnx",
+                "reward": -9.839499913156033,
+                "creation_time": 1746953784.4522462,
+                "auxillary_file_paths": [
+                    "results\\Run1\\ThunderSearch\\ThunderSearch-2999993.pt"
+                ]
+            },
+            {
+                "steps": 3000117,
+                "file_path": "results\\Run1\\ThunderSearch\\ThunderSearch-3000117.onnx",
+                "reward": -10.326341362988076,
+                "creation_time": 1746953784.530735,
+                "auxillary_file_paths": [
+                    "results\\Run1\\ThunderSearch\\ThunderSearch-3000117.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 3000117,
+            "file_path": "results\\Run1\\ThunderSearch.onnx",
+            "reward": -10.326341362988076,
+            "creation_time": 1746953784.530735,
+            "auxillary_file_paths": [
+                "results\\Run1\\ThunderSearch\\ThunderSearch-3000117.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.28.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}

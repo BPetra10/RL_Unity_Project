@@ -34,13 +34,17 @@ public class AgentController : Agent
         }
         env.GetGameManager().ResetEnvironment();
 
-        transform.localPosition = new Vector3(0, -4.1f, 0);
+        transform.localPosition = new Vector3(0, -4f, 0);
 
-        TargetTransform = GameObject.FindGameObjectWithTag("Thunder").transform;
-
+        GameObject closestThunder = FindClosestWithTag("Thunder");
+        TargetTransform = closestThunder != null ? closestThunder.transform : null;
         if (TargetTransform == null)
         {
-            Debug.LogError("Target GameObject not found");
+            Debug.LogError("[ENV] Thunder GameObject not found in this environment.");
+        }
+        else
+        {
+            Debug.LogWarning("Target Transform Found:" + TargetTransform);
         }
         animator = GetComponentInParent<Animator>();
     }
@@ -127,8 +131,6 @@ public class AgentController : Agent
     {
         var actions = actionsOut.DiscreteActions;
 
-        // The GetAxisRaw() function returns values from the [-1,1]
-        // interval
         var horizontal = Input.GetAxisRaw("Horizontal"); 
         var vertical = Input.GetAxisRaw("Vertical");
 
@@ -193,9 +195,10 @@ public class AgentController : Agent
 
     private void OnCollisionEnter(Collision collision)
     {
+        //fal bünti opcionálian  kihagyható
         if (collision.collider.tag == "Wall")
         {
-            AddReward(-2f);
+            AddReward(-1f);
             Debug.LogWarning($"Wall punishment applied.");
             EndEpisode();
         }

@@ -1,3 +1,4 @@
+Ôªøusing System.Linq;
 using Unity.MLAgents;
 using UnityEngine;
 
@@ -19,6 +20,16 @@ public class GameManager : MonoBehaviour
     {
         env = GetComponentInParent<EnvironmentController>();
         SpawnCollectable();
+
+
+        //T√ñBB VILL√ÅM GYORSABB TANUL√ÅSHOZ (3) Resetben is ki kell kommenteleni
+        //for (int i = 0; i < 3; i++)
+        //{
+           
+        //    SpawnCollectable();
+        //}
+
+
         for (int i = 0; i < initialEnemyCount; i++)
         {
             SpawnEnemy();
@@ -36,7 +47,7 @@ public class GameManager : MonoBehaviour
         counter++;
         higherReward = Mathf.Min(higherReward + 10f, maxReward);
 
-        Debug.Log("Reward for collectable pick up: " + higherReward);
+        Debug.LogError("Reward for collectable pick up: " + higherReward);
 
         if (counter >= goalNumber)
         {
@@ -71,12 +82,24 @@ public class GameManager : MonoBehaviour
 
     private bool IsTooClose(Vector3 pos)
     {
-        foreach (var enemy in GameObject.FindGameObjectsWithTag("EnemyTurret"))
+        var objectsToCheck = env.GetComponentsInChildren<Transform>(true)
+                           .Where(t => t.CompareTag("EnemyTurret") || t.CompareTag("Thunder") || t.CompareTag("Agent"))
+                           .Select(t => t.gameObject)
+                           .ToList(); 
+
+        foreach (GameObject obj in objectsToCheck)
         {
-            if (enemy.transform.IsChildOf(transform) &&
-                Vector3.Distance(pos, enemy.transform.position) < minDistance)
+            
+            Vector3 objPosFlat = new Vector3(obj.transform.position.x, 0, obj.transform.position.z);
+            Vector3 posFlat = new Vector3(pos.x, 0, pos.z);
+
+            
+            if (Vector3.Distance(posFlat, objPosFlat) < minDistance)
+            { 
                 return true;
+            }
         }
+
         return false;
     }
 
@@ -88,13 +111,13 @@ public class GameManager : MonoBehaviour
             if (child.CompareTag("Thunder")) Destroy(child.gameObject);
         }
 
-        // Tˆrˆlj¸k az ellensÈgeket
+       
         foreach (Transform child in env.transform)
         {
             if (child.CompareTag("EnemyTurret")) Destroy(child.gameObject);
         }
 
-        // Tˆrˆlj¸k a lˆvedÈkeket
+       
         foreach (Transform child in env.transform)
         {
             if (child.CompareTag("Projectile")) Destroy(child.gameObject);
@@ -103,7 +126,15 @@ public class GameManager : MonoBehaviour
         {
             SpawnEnemy();
         }
+
         SpawnCollectable();
+
+
+        //for (int i = 0; i < 3; i++)
+        //{
+            
+        //    SpawnCollectable();
+        //}
         higherReward = 30f;
     }
 }

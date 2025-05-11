@@ -19,7 +19,9 @@ public class ProjectileController : MonoBehaviour
 
         gm = envController.GetGameManager().gameObject;
         agentTransform = envController.GetAgent().transform;
+
         if (gm == null) Debug.LogError("Game Manager object not found");
+
         if (agentTransform == null) Debug.LogError("Player GameObject not found");
 
         RotateTowardsPlayer();
