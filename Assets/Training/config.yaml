@@ -1,0 +1,23 @@
+behaviors:
+  ThunderSearch:
+    trainer_type: ppo
+    time_horizon: 128  # hosszabb horizon a stabilabb tanulás érdekében
+    max_steps: 3e6  
+    hyperparameters:
+      learning_rate: 1e-4 
+      batch_size: 4096  # nagyobb batch a stabilabb gradiensekhez
+      buffer_size: 100000  # nagyobb tapasztalati memória
+      num_epoch: 3  
+    network_settings:
+      normalize: true  
+      num_layers: 3
+      hidden_units: 256
+    reward_signals:
+      extrinsic:
+        gamma: 0.99  # hosszabb távú tervezés, hatékonyabb navigáció
+        strength: 1.0
+    summary_freq: 50000
+    threaded: true
+
+torch_settings:
+  device: cpu

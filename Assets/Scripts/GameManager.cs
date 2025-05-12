@@ -10,7 +10,6 @@ public class GameManager : MonoBehaviour
     private int initialEnemyCount = 1;
     private int counter = 0;
     private int goalNumber = 10;
-    private float minDistance = 5f;
     private float higherReward = 30f;
     private float maxReward = 80f;
 
