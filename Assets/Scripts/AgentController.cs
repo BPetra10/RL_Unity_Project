@@ -203,7 +203,6 @@ public class AgentController : Agent
 
     private void OnCollisionEnter(Collision collision)
     {
-        //fal bünti opcionálian  kihagyható
         if (collision.collider.tag == "Wall")
         {
             AddReward(-10f);

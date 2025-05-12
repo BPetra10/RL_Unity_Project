@@ -21,7 +21,6 @@ public class EnemyTurretController : MonoBehaviour
             return;
         }
 
-        agentTransform = envController.GetAgent().transform;
         gm = envController.GetGameManager().gameObject;
 
         agentTransform = envController.GetAgent().transform;
